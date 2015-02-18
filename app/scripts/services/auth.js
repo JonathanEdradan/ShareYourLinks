@@ -1,35 +1,45 @@
 'use strict';
-// $firebaseSimpleLogin service provides a $createUser function we can use that takes an email and password.
-app.factory('Auth', function ($firebaseSimpleLogin, FIREBASE_URL, $rootScope) {
+
+app.factory('Auth', function($firebase, $firebaseAuth, FIREBASE_URL) {
   var ref = new Firebase(FIREBASE_URL);
-  var auth = $firebaseSimpleLogin(ref);
+  var auth = $firebaseAuth(ref);
 
   var Auth = {
-    register: function (user) {
+    register: function(user) {
       return auth.$createUser(user.email, user.password);
     },
-    login: function (user) {
-      return auth.$login('password', user);
+    login: function(user) {
+      return auth.$authWithPassword({
+        email: user.email,
+        password: user.password
+      });
     },
-    logout: function () {
-      auth.$logout();
+    logout: function() {
+      auth.$unauth();
     },
     resolveUser: function() {
-      return auth.$getCurrentUser();
+      return auth.$getAuth();
     },
     signedIn: function() {
       return !!Auth.user.provider;
     },
     user: {}
   };
-  // $rootScope is similar to $scope but is global across the entire application
-  $rootScope.$on('$firebaseSimpleLogin:login', function(e, user) {
-    console.log('logged in');
-    angular.copy(user, Auth.user);
-  });
-  $rootScope.$on('$firebaseSimpleLogin:logout', function() {
-    console.log('logged out');
-    angular.copy({}, Auth.user);
+
+  auth.$onAuth(function(authData) {
+    if (authData) {
+      console.log('Logged in');
+      angular.copy(authData, Auth.user);
+      Auth.user.profile = $firebase(ref.child('profiles').child(Auth.user.uid)).$asObject();
+    } else {
+      console.log('Logged out');
+
+      if (Auth.user && Auth.user.profile) {
+        Auth.user.profile.$destroy();
+      }
+
+      angular.copy({}, Auth.user);
+    }
   });
 
   return Auth;

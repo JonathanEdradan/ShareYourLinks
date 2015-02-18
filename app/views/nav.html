@@ -7,14 +7,14 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="#">Share Your Links</a>
+    <a class="navbar-brand" href="#/">Share Your Links</a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
   <!-- Our users will create new posts through a form. Within our form, there are two inputs that are bound to the post model. -->
 	<!-- ng-submit directive allows us to execute the submitPost() function in our PostsCtrl -->
   <div ng-controller="NavCtrl" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <form class="navbar-form navbar-left" role="search" ng-submit="submitPost()">
+    <form ng-show="signedIn()" class="navbar-form navbar-left" role="search" ng-submit="submitPost()">
       <div class="form-group">
         <input type="text" class="form-control" placeholder="Title" ng-model="post.title">
       </div>
@@ -23,5 +23,16 @@
       </div>
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
+    <ul class="nav navbar-nav navbar-right">
+      <li ng-show="signedIn()">
+        <a ng-href="#/" ng-click="logout()">Log-out</a>
+      </li>
+      <li ng-hide="signedIn()">
+        <a ng-href="#/login">Log-in</a>
+      </li>
+      <li ng-hide="signedIn()">
+        <a ng-href="#/register">Register</a>
+      </li>
+    </ul>
   </div><!-- /.navbar-collapse -->
 </nav>
