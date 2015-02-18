@@ -33,6 +33,18 @@ app.config(function ($routeProvider) {
       templateUrl: 'views/showpost.html',
       controller:  'PostViewCtrl'
     })
+    .when('/register', {
+      templateUrl: 'views/register.html',
+      controller:  'AuthCtrl',
+      // The resolve property is used to define dependencies that needs to be resolved before our controller is instantiated. 
+      // In this case, we want to make sure we know the authentication status of the user so we can seamlessly redirect them 
+      // to the homepage if they're already logged in. We're also defining a user property that we can inject into our controller.
+      resolve: {
+        user: function(Auth) {
+          return Auth.resolveUser();
+        }
+      }
+    })
     .otherwise({
       redirectTo: '/'
     });
