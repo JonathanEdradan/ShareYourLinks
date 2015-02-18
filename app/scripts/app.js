@@ -1,6 +1,7 @@
 'use strict';
+
 /* global app:true */
-/* exported app*/
+/* exported app */
 
 /**
  * @ngdoc overview
@@ -10,7 +11,8 @@
  *
  * Main module of the application.
  */
-var app = angular.module('shareyourlinksApp', [
+var app = angular
+  .module('shareyourlinksApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',

@@ -1,7 +1,7 @@
 <!-- To repeat sets of data within a UI element with values from each object in the set, we use the directive 'ng-repeat'-->
-<div ng-repeat="post in posts">
+<div ng-repeat="(postId, post) in posts">
 	<a ng-href="{{ post.url }}">{{ post.title }}</a>
-	<a ng-click="deletePost($index)">delete</a>
+	<a ng-click="deletePost(postId)">delete</a>
 </div>
 <!-- Our users will create new posts through a form. Within our form, there are two inputs that are bound to the post model. -->
 <!-- ng-submit directive allows us to execute the submitPost() function in our PostsCtrl -->
